@@ -1,0 +1,28 @@
+rawWafer<-read.csv("WaferLog.csv",header = TRUE,sep=",")
+library(doBy)
+rawWafer<-orderBy(~Wafer.ID+Time, data=rawWafer)
+rawWafer<-rawWafer[rawWafer$Action!="PROCESS_COMPLETE",]
+rawWaferIN<-subset(rawWafer,rawWafer$Action=="LOGIN_TOOL")
+rawWaferOUT<-subset(rawWafer,rawWafer$Action=="LOGOUT_TOOL")
+#拆成兩個子集合
+diff<-difftime(rawWaferOUT$Time,rawWaferIN$Time,units = "secs")
+all(rawWaferIN$Wafer.ID==rawWaferOUT$Wafer.ID)   #TRUE
+diff<-as.numeric(diff)
+difftimetable=data.frame(ToolID=rawWaferIN$Tool.ID,sec=diff)
+difftimetable=orderBy(~ToolID,data=difftimetable)
+mean1=mean(difftimetable[grep("ToolA",difftimetable$ToolID),2])
+mean2=mean(difftimetable[grep("ToolB",difftimetable$ToolID),2])
+mean3=mean(difftimetable[grep("ToolC",difftimetable$ToolID),2])
+mean4=mean(difftimetable[grep("ToolD",difftimetable$ToolID),2])
+mean5=mean(difftimetable[grep("ToolE",difftimetable$ToolID),2])
+mean6=mean(difftimetable[grep("ToolF",difftimetable$ToolID),2])
+mean7=mean(difftimetable[grep("ToolG",difftimetable$ToolID),2])
+mean8=mean(difftimetable[grep("ToolH",difftimetable$ToolID),2])
+mean9=mean(difftimetable[grep("ToolI",difftimetable$ToolID),2])
+mean10=mean(difftimetable[grep("ToolJ",difftimetable$ToolID),2])
+mean11=mean(difftimetable[grep("ToolK",difftimetable$ToolID),2])
+mean12=mean(difftimetable[grep("ToolL",difftimetable$ToolID),2])
+mean13=mean(difftimetable[grep("ToolM",difftimetable$ToolID),2])
+mean14=mean(difftimetable[grep("ToolN",difftimetable$ToolID),2])
+ans9<-data.frame(ToolType=LETTERS[1:14],ProcessTime=c(mean1,mean2,mean3,mean4,mean5,mean6,mean7,mean8,mean9,mean10,mean11,mean12,mean13,mean14))
+ans9[order(ans9$ProcessTime,decreasing = TRUE),]
